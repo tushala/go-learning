@@ -83,7 +83,7 @@ func practice9() {
 	var a int = 15
 	var b int32 = int32(a)
 	//b = int32(a)
-	fmt.Println(b)
+	fmt.Println(b) // 15
 }
 func practice10() {
 	//使用math/rand生成10个随机整数，10个小于100的随机整数以及10个随机浮点数？
@@ -131,11 +131,13 @@ func main() {
 	//practice5()
 	//practice6()
 	//practice7()
-	//practice8()
+	practice8()
 	//practice9()
 	//practice10()
 	//practice11()
 	//homework1()
 	//homework2()
-	homework3(5)
+	//homework3(5)
+
+	//fmt.Println(a)
 }

@@ -24,8 +24,14 @@ func main() {
 	//m =int32(n)
 	//fmt.Printf("32 bit int is: %d\n", m)
 	//fmt.Printf("16 bit int is: %d\n", n)
-	var a byte = 'a' //单引号
-	var str = "hello world"
-	fmt.Println("a = ", a)  //97
-	fmt.Println("str = ", str)
+	//var a byte = 'a' //单引号
+	//var str = "hello world"
+	//fmt.Println("a = ", a)  //97
+	//fmt.Println("str = ", str)
+	const(
+		a = iota
+		b
+		c
+	)
+	fmt.Println(a, b, c) // 0 1 2
 }
