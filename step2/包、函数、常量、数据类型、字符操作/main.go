@@ -1,12 +1,14 @@
 package main
 
 import (
+	// 从外引入需大写
 	"fmt"
 	_ "go-learning/step2/包、函数、常量、数据类型、字符操作/add" //_ 导入但不用
+	"math/rand"
 	"os"
 	"time"
-
 	//"./add"
+	"./utils"
 )
 
 func init() {
@@ -68,6 +70,59 @@ func practice7() {
 	swap(&a, &b)
 	fmt.Printf("a = %d b = %d", a, b)
 }
+func practice8() {
+	var a bool = true
+	var b bool
+	fmt.Println(!a)
+	fmt.Println(!b)
+	fmt.Println(a && b)
+	fmt.Println(a || b)
+}
+func practice9() {
+	//类型转换
+	var a int = 15
+	var b int32 = int32(a)
+	//b = int32(a)
+	fmt.Println(b)
+}
+func practice10() {
+	//使用math/rand生成10个随机整数，10个小于100的随机整数以及10个随机浮点数？
+	for i := 0; i < 10; i++ {
+		fmt.Printf("%d ", rand.Intn(100))
+	}
+	fmt.Println()
+	for i := 0; i < 10; i++ {
+		fmt.Printf("%.2f ", 100*rand.Float32())
+	}
+}
+func practice11() {
+	//字符串表示两种方式： 1）双引号    2）``   （反引号）
+	var str1 = "hello world"
+	var str2 = `hello world\n\n\n\
+tutututushala
+tututshala`
+	fmt.Println("str1=", str1)
+	fmt.Println("str2=", str2)
+}
+func homework1() {
+	//判断 101-200 之间有多少个素数，并输出所有素数
+	for i := 101; i < 201; i++ {
+		if utils.Is_Prime(i) == true {
+			fmt.Println(i)
+		}
+	}
+}
+func homework2() {
+	//打印出100-999中所有的“水仙花数”，
+	for i := 101; i < 1000; i++ {
+		if utils.Is_Narcissus_Num(i) == true {
+			fmt.Println(i)
+		}
+	}
+}
+func homework3(num int){
+	fmt.Println(utils.Factorial_sum(num))
+}
 func main() {
 	//practice1(5)
 	//practice2()
@@ -75,5 +130,12 @@ func main() {
 	//practice4()
 	//practice5()
 	//practice6()
-	practice7()
+	//practice7()
+	//practice8()
+	//practice9()
+	//practice10()
+	//practice11()
+	//homework1()
+	//homework2()
+	homework3(5)
 }
