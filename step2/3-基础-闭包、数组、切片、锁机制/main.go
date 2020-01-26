@@ -85,12 +85,36 @@ func practice10() {
 }
 func homework1(a []int) {
 	//冒泡排序
-	for i:=0;i<len(a);i++{
-		for j:=0;j<i;j++{
-			if a[i] < a[j]{
-				a[i],a[j] = a[j], a[i]
+	for i := 0; i < len(a); i++ {
+		for j := 0; j < i; j++ {
+			if a[i] < a[j] {
+				a[i], a[j] = a[j], a[i]
 			}
 		}
+	}
+}
+func homework2(left, right int, a []int) {
+
+	s, e := left, right-1
+	mid := a[int((s+e)/2)]
+	for s <= e {
+		if a[s] < mid {
+			s += 1
+		} else if a[e] > mid {
+			e -= 1
+		} else {
+			if s <= e {
+				a[s], a[e] = a[e], a[s]
+				s += 1
+				e -= 1
+			}
+		}
+	}
+	if left < e {
+		homework2(left, e, a)
+	}
+	if s < right {
+		homework2(s, right, a)
 	}
 }
 func main() {
@@ -116,8 +140,9 @@ func main() {
 		fmt.Println(a[i])
 	}*/
 	//practice10()
-	var a = [...]int{6, 5, 4, 3, 2, 1}
+	var a = [...]int{6, 5, 4, 3, 2, 1, 7}
 	fmt.Println(a)
-	homework1(a[:])
+	//homework1(a[:])
+	homework2(0, len(a), a[:])
 	fmt.Println(a)
 }
