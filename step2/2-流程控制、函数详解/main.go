@@ -224,13 +224,16 @@ func homework5(a, b int) {
 	borrow := 0
 	var ans string
 	var s int
+
 	min_length := int(math.Min(float64(len(stra)), float64(len(strb))))
 	if len(strb) >= len(stra) {
 		stra, strb = strb, stra
 	}
-	for i := min_length - 1; i <= 0; i-- {
-		va := int(stra[i] - '0')
-		vb := int(strb[i] - '0')
+	length_a := len(stra)
+	length_b := len(strb)
+	for i := 0; i < min_length; i++ {
+		va := int(stra[length_a-i-1] - '0')
+		vb := int(strb[length_b-i-1] - '0')
 		if va+vb >= 10 {
 			s = va + vb + borrow - 10
 			borrow = 1
@@ -242,17 +245,25 @@ func homework5(a, b int) {
 		p := string('0' + s)
 		ans = p + ans
 	}
-	for i := len(stra); i <= min_length; i++ {
-		s := int(stra[i] - '0')
-		if va+vb >= 10 {
-			s = va + vb + borrow - 10
+
+	//for i := len(stra)-1; i <= min_length-1; i++ {
+	for i := min_length; i < len(stra); i++ {
+		//fmt.Println(123, i)
+		s := int(stra[length_a-i-1] - '0')
+		if s+borrow >= 10 {
+			s = s + borrow - 10
 			borrow = 1
 		} else {
-			s = va + vb + borrow
+			s = s + borrow
 			borrow = 0
 		}
-
+		p := string('0' + s)
+		ans = p + ans
 	}
+	if borrow == 1 {
+		ans = "1" + ans
+	}
+	fmt.Println(ans)
 }
 func main() {
 	//strings和strconv使用
@@ -286,5 +297,5 @@ func main() {
 	//homework2()
 	//homework3("abcaaa")
 	//homework4()
-	homework5()
+	homework5(1, 99999999)
 }
