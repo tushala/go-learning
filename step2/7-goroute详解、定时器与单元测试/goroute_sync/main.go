@@ -48,13 +48,14 @@ import "fmt"
 //	time.Sleep(time.Second*4)
 //
 //}
-func send(ch chan int, exitChan chan struct{}) {
+func send(ch chan int) {
 	for i := 0; i < 10; i++ {
 		ch <- i
 	}
 
-	var a struct{}
-	exitChan <- a
+	//var a struct{}
+	close(ch) // 不close会导致死锁
+	//exitChan <- a
 }
 func recv(ch chan int, exitChan chan struct{}) {
 	for {
@@ -67,22 +68,21 @@ func recv(ch chan int, exitChan chan struct{}) {
 
 	var a struct{}
 	exitChan <- a
+	close(exitChan)
 }
 
 func main() {
+	// 只写不读会阻塞, 只写慢读没关系
 	ch := make(chan int, 10)
-	exitChan := make(chan struct{}, 10)
+	//exitChan := make(chan struct{}, 1)
 
-	go send(ch, exitChan)
-	go recv(ch, exitChan)
-
-	var total int = 0
-	for _ = range exitChan{
-		total += 1
-		fmt.Println(1, total)
-		if total == 2{
-			close(exitChan)
-			break
-		}
-	}
+	go send(ch)
+	//go recv(ch, exitChan)
+	//
+	//for{
+	//	_, ok := <-exitChan
+	//	if !ok{
+	//		break
+	//	}
+	//}
 }
