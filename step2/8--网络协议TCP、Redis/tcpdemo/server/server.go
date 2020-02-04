@@ -9,7 +9,7 @@ func process(conn net.Conn){
 	defer conn.Close()
 	for{
 		buf := make([]byte, 1024)
-		fmt.Printf("服务器等待 %s 输入...\n", conn.RemoteAddr().String())
+		//fmt.Printf("服务器等待 %s 输入...\n", conn.RemoteAddr().String())
 		n, err := conn.Read(buf) // 从conn 读取
 		if err != nil{
 			//if err == io.EOF{
