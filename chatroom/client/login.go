@@ -8,11 +8,12 @@ import (
 	"net"
 )
 
+
 func login(userId int, userPwd string) (err error) {
 	//fmt.Printf("userid= %d userPwd= %s\n", userId, userPwd)
 	//return nil
 	conn, err := net.Dial("tcp", "localhost:8889")
-	if err !=nil{
+	if err != nil {
 		fmt.Println("net Dial err= ", err)
 		return
 	}
@@ -26,24 +27,47 @@ func login(userId int, userPwd string) (err error) {
 
 	//loginMes 序列化
 	data, err := json.Marshal(loginMes)
-	if err != nil{
-		fmt.Println("json Marshal err= ", err )
+	if err != nil {
+		fmt.Println("json Marshal err= ", err)
 	}
 	mes.Data = string(data)
 	//mes 序列化
 	data, err = json.Marshal(mes)
-	if err != nil{
-		fmt.Println("json Marshal err= ", err )
+	if err != nil {
+		fmt.Println("json Marshal err= ", err)
+		return
 	}
 	// 为防止丢包先发送data长度
 	var pkgLen uint32
 	pkgLen = uint32(len(data))
 	var buf [4]byte
-	binary.BigEndian.PutUint32(buf[0:4],pkgLen)
+	binary.BigEndian.PutUint32(buf[0:4], pkgLen)
 	n, err := conn.Write(buf[:])
-	if n!=4 || err !=nil{
+	if n != 4 || err != nil {
 		fmt.Println("conn Write fail ", err)
+		return
 	}
-	fmt.Printf("客户端发送消息长度 = %d 内容是 %s\n", len(data), string(data))
+	//fmt.Printf("客户端发送消息长度 = %d 内容是 %s\n", len(data), string(data))
+
+	// 发送消息本身
+	_, err = conn.Write(data)
+	if err != nil {
+		fmt.Println("conn Write fail ", err)
+		return
+	}
+	//time.Sleep(time.Second * 20)
+	//fmt.Println("休眠20秒")
+	mes, err = readPkg(conn)
+	if err != nil{
+		fmt.Println("readPkg err = ", err)
+		return
+	}
+	var loginResMes message.LoginResMes
+	err = json.Unmarshal([]byte(mes.Data), &loginResMes)
+	if loginResMes.Code == 200{
+		fmt.Println("登录成功")
+	}else if loginResMes.Code == 500{
+		fmt.Println(loginResMes.Error)
+	}
 	return
 }
