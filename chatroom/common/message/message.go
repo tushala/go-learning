@@ -20,7 +20,7 @@ type LoginMes struct {
 }
 type LoginResMes struct {
 	Code  int   `json:"code"`  //状态码 500表示没注册 200表示登录成功
-	Error error `json:"error"` //错误信息
+	Error string `json:"error"` //错误信息
 }
 
 type RegisterMes struct {

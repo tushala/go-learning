@@ -47,7 +47,7 @@ func login(userId int, userPwd string) (err error) {
 		fmt.Println("conn Write fail ", err)
 		return
 	}
-	//fmt.Printf("客户端发送消息长度 = %d 内容是 %s\n", len(data), string(data))
+	//fmt.Printf("客户端发送消息长度 = %d 内容是 %s\n", len(data), st ring(data))
 
 	// 发送消息本身
 	_, err = conn.Write(data)
@@ -55,6 +55,7 @@ func login(userId int, userPwd string) (err error) {
 		fmt.Println("conn Write fail ", err)
 		return
 	}
+	//return
 	//time.Sleep(time.Second * 20)
 	//fmt.Println("休眠20秒")
 	mes, err = readPkg(conn)

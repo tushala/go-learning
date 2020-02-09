@@ -21,8 +21,8 @@ func readPkg(conn net.Conn) (mes message.Message, err error) {
 	pkgLen = binary.BigEndian.Uint32(buf[0:4])
 
 	// 根据pkgLen 读取消息内容
-	conn.Read(buf[:pkgLen])
-	n, err := conn.Read(buf[:4])
+	//conn.Read(buf[:pkgLen])
+	n, err := conn.Read(buf[:pkgLen])
 	if n != int(pkgLen) || err != nil {
 		//fmt.Println("conn read fail ", err)
 		//err = errors.New("conn read fail ")

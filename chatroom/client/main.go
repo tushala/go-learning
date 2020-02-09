@@ -11,7 +11,7 @@ var userPwd string
 func main() {
 	var key int          // 接受用户选择
 	var loop bool = true // 是否还继续显示
-	for loop{
+	for loop {
 		fmt.Println("--------------------欢迎登录多人聊天系统--------------------")
 		fmt.Println("\t\t\t 1 登陆聊天室")
 		fmt.Println("\t\t\t 2 注册用户")
@@ -34,7 +34,7 @@ func main() {
 		}
 	}
 
-	if key == 1{
+	if key == 1 {
 		fmt.Println("请输入用户的id")
 		fmt.Scanf("%d\n", &userId)
 		fmt.Println("请输入用户的密码")
@@ -45,7 +45,7 @@ func main() {
 		//}else{
 		//	fmt.Println("登录成功")
 		//}
-	}else{
+	} else {
 
 	}
 }
