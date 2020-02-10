@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"go-learning/chatroom/client/process"
 	"os"
 )
 
@@ -21,10 +22,17 @@ func main() {
 		switch key {
 		case 1:
 			fmt.Println("登陆聊天室")
-			loop = false
+			fmt.Println("请输入用户的id")
+			fmt.Scanf("%d\n", &userId)
+			fmt.Println("请输入用户的密码")
+			fmt.Scanf("%s\n", &userPwd)
+
+			up := &process.UserProcess{}
+			up.Login(userId, userPwd)
+			//loop = false
 		case 2:
 			fmt.Println("注册用户")
-			loop = false
+			//loop = false
 		case 3:
 			fmt.Println("退出系统")
 			//loop = false
@@ -34,18 +42,18 @@ func main() {
 		}
 	}
 
-	if key == 1 {
-		fmt.Println("请输入用户的id")
-		fmt.Scanf("%d\n", &userId)
-		fmt.Println("请输入用户的密码")
-		fmt.Scanf("%s\n", &userPwd)
-		login(userId, userPwd)
-		//if err != nil{
-		//	fmt.Println("登录失败")
-		//}else{
-		//	fmt.Println("登录成功")
-		//}
-	} else {
-
-	}
+	//if key == 1 {
+	//	fmt.Println("请输入用户的id")
+	//	fmt.Scanf("%d\n", &userId)
+	//	fmt.Println("请输入用户的密码")
+	//	fmt.Scanf("%s\n", &userPwd)
+	//	main2.login(userId, userPwd)
+	//	//if err != nil{
+	//	//	fmt.Println("登录失败")
+	//	//}else{
+	//	//	fmt.Println("登录成功")
+	//	//}
+	//} else {
+	//
+	//}
 }

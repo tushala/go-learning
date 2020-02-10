@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"go-learning/chatroom/common/message"
+	process3 "go-learning/chatroom/server/process"
 	"go-learning/chatroom/server/utils"
-	"go-learning/chatroom/server/process"
 	"io"
 	"net"
 )
@@ -18,10 +18,11 @@ func (self *Processor) serverProcessMes(mes *message.Message) (err error) {
 	switch mes.Type {
 	case message.LoginMesType:
 		// 创建 UserProcess 实例
-		up := &process.UserProcess{
+		up := &process3.UserProcess{
 			Conn: self.Conn,
 		}
-		err = up.ServerProcessLogin(self.Conn, mes)
+
+		err = up.ServerProcessLogin(mes)
 	case message.RegisterMesType:
 	//
 	default:
@@ -42,11 +43,11 @@ func (self *Processor) process2() (err error){
 			} else {
 				fmt.Println("readPkg err ", err)
 			}
-			return
+			return err
 		}
 		err = self.serverProcessMes(&mes)
 		if err != nil {
-			return
+			return err
 		}
 	}
 }

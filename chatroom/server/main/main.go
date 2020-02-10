@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net"
 )
 
@@ -109,15 +110,22 @@ import (
 //	//fmt.Println("读到buf=", buf[:4])
 //	return
 //}
-func process(conn net.Conn) {
+func process2(conn net.Conn) {
 	// 处理和客户的通讯
 	defer conn.Close()
 	// 循环读取客户端发送的消息
 	processor := Processor{
-		Conn:conn,
+		Conn: conn,
 	}
-	processor.process2()
-
+	err := processor.process2()
+	if err != nil {
+		if err == io.EOF {
+			fmt.Println("客户端退出")
+		}else{
+			fmt.Println("客户端和服务器通讯协程错误: ", err)
+		}
+		return
+	}
 
 }
 func main() {
@@ -135,6 +143,6 @@ func main() {
 		if err != nil {
 			fmt.Println("listen accept err: ", err)
 		}
-		go process(conn)
+		go process2(conn)
 	}
 }
