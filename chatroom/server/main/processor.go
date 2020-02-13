@@ -24,13 +24,17 @@ func (self *Processor) serverProcessMes(mes *message.Message) (err error) {
 
 		err = up.ServerProcessLogin(mes)
 	case message.RegisterMesType:
-	//
+		up := &process3.UserProcess{
+			Conn: self.Conn,
+		}
+
+		err = up.ServerProcessRegister(mes)
 	default:
 		fmt.Println("消息类型不存在，无法处理...")
 	}
 	return
 }
-func (self *Processor) process2() (err error){
+func (self *Processor) process2() (err error) {
 	for {
 		// 将读取数据包直接封装成一个函数readPkg()
 		tf := &utils.Transfer{

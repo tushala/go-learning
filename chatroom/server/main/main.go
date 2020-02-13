@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"go-learning/chatroom/server/model"
 	"io"
 	"net"
+	"time"
 )
 
 //func writePkg(conn net.Conn, data []byte) (err error) {
@@ -121,14 +123,18 @@ func process2(conn net.Conn) {
 	if err != nil {
 		if err == io.EOF {
 			fmt.Println("客户端退出")
-		}else{
+		} else {
 			fmt.Println("客户端和服务器通讯协程错误: ", err)
 		}
 		return
 	}
-
+}
+func initUserDao() {
+	model.MyUserDao = model.NewUserDao(pool)
 }
 func main() {
+	initPool("local:6379", 16, 0, 300*time.Second)
+	initUserDao()
 	fmt.Println("服务器在8889端口监听....")
 	listen, err := net.Listen("tcp", "0.0.0.0:8889")
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 	"go-learning/chatroom/client/utils"
 	"go-learning/chatroom/common/message"
 	"net"
+	"os"
 )
 
 type UserProcess struct {
@@ -75,11 +76,62 @@ func (self *UserProcess) Login(userId int, userPwd string) (err error) {
 		// 启动一个协程保持和服务端的通讯,如果服务器有数据推送给客户端
 		go serverProcessMes(conn)
 		//fmt.Println("登录成功")
-		for{
+		for {
 			ShowMenu()
 		}
-	} else if loginResMes.Code == 500 {
+	} else {
 		fmt.Println(loginResMes.Error)
 	}
+	return
+}
+func (self *UserProcess) Register(userId int, userPwd, userName string) (err error) {
+	conn, err := net.Dial("tcp", "localhost:8889")
+	if err != nil {
+		fmt.Println("net Dial err= ", err)
+		return
+	}
+	defer conn.Close()
+	var mes message.Message
+	mes.Type = message.RegisterMesType
+
+	var registerMes message.RegisterMes
+	registerMes.User.UserId = userId
+	registerMes.User.UserPwd = userPwd
+	registerMes.User.UserName = userName
+
+	//loginMes 序列化
+	data, err := json.Marshal(registerMes)
+	if err != nil {
+		fmt.Println("json Marshal err= ", err)
+	}
+	mes.Data = string(data)
+	//mes 序列化
+	data, err = json.Marshal(mes)
+	if err != nil {
+		fmt.Println("json Marshal err= ", err)
+		return
+	}
+
+	tf := &utils.Transfer{
+		Conn: conn,
+	}
+	err = tf.WritePkg(data)
+	if err != nil {
+		fmt.Println("注册发送信息错误 = ", err)
+		return
+	}
+	mes, err = tf.ReadPkg()
+	if err != nil {
+		fmt.Println("ReadPkg err = ", err)
+		return
+	}
+	var RegisterResMes message.RegisterResMes
+	err = json.Unmarshal([]byte(mes.Data), &RegisterResMes)
+	if RegisterResMes.Code == 200 {
+		fmt.Println("注册成功, 重新登录吧")
+	} else {
+		fmt.Println(RegisterResMes.Error)
+	}
+	os.Exit(0)
 	return
 }
