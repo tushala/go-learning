@@ -75,6 +75,11 @@ func (self *UserProcess) Login(userId int, userPwd string) (err error) {
 	if loginResMes.Code == 200 {
 		// 启动一个协程保持和服务端的通讯,如果服务器有数据推送给客户端
 		go serverProcessMes(conn)
+		fmt.Println("当前在线用户列表如下：")
+		for _, v := range loginResMes.UsersId{
+			fmt.Println("用户id: \t", v)
+		}
+		fmt.Print("\n\n")
 		//fmt.Println("登录成功")
 		for {
 			ShowMenu()

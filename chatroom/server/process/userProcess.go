@@ -12,6 +12,7 @@ import (
 type UserProcess struct {
 	// 字段
 	Conn net.Conn
+	UserId int
 }
 
 func (self *UserProcess) ServerProcessLogin(mes *message.Message) (err error) {
@@ -42,6 +43,11 @@ func (self *UserProcess) ServerProcessLogin(mes *message.Message) (err error) {
 	} else {
 		loginResMes.Code = 200
 		loginResMes.Error = fmt.Sprintf("%s 登录成功\n", user.UserName)
+		self.UserId = loginMes.UserId
+		userMgr.AddOnlineUser(self)
+		for id, _ := range userMgr.onlineUsers{
+			loginResMes.UsersId = append(loginResMes.UsersId, id)
+		}
 		fmt.Printf("%s 登录成功\n", user.UserName)
 	}
 
