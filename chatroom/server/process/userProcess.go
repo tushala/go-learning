@@ -93,10 +93,13 @@ func (self *UserProcess) ServerProcessRegister(mes *message.Message) (err error)
 		if err == model.ERROR_USER_EXISTS {
 			registerResMes.Code = 505
 		} else {
-			registerResMes.Code = 200
+			registerResMes.Code = 506
+			registerResMes.Error = "注册发生未知错误"
 		}
-		registerResMes.Error = fmt.Sprintf("%s", err)
+	}else{
+		registerResMes.Code = 200
 	}
+	registerResMes.Error = fmt.Sprintf("%s", err)
 	data, err := json.Marshal(registerResMes)
 	if err != nil {
 		fmt.Println("json.marshal error = ", err)

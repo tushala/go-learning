@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"go-learning/chatroom/client/utils"
 	"go-learning/chatroom/common/message"
 	"net"
 )
@@ -58,7 +59,10 @@ func login(userId int, userPwd string) (err error) {
 	//return
 	//time.Sleep(time.Second * 20)
 	//fmt.Println("休眠20秒")
-	mes, err = readPkg(conn)
+	tf := &utils.Transfer{
+		Conn: conn,
+	}
+	mes, err = tf.ReadPkg()
 	if err != nil{
 		fmt.Println("readPkg err = ", err)
 		return

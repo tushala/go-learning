@@ -41,11 +41,12 @@ func (self *Processor) process2() (err error) {
 			Conn: self.Conn,
 		}
 		mes, err := tf.ReadPkg()
+		fmt.Println(111, err)
 		if err != nil {
 			if err == io.EOF {
 				fmt.Println("客户端退出")
 			} else {
-				fmt.Println("readPkg err ", err)
+				fmt.Println("process2() err", err)
 			}
 			return err
 		}
