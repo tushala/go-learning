@@ -14,7 +14,36 @@ type UserProcess struct {
 	Conn net.Conn
 	UserId int
 }
+//通知其他用户我上线了
+func (self *UserProcess) NotifyOthersOnlineUser(userId int){
+	for id ,up := range userMgr.onlineUsers{
+		if id == userId{
+			continue
+		}
+		// 通知
+		up.NotifyMeOnlineUser(userId)
+	}
+}
+func (self *UserProcess) NotifyMeOnlineUser(userId int){
+	var mes message.Message
+	mes.Type = message.NotifyUserStatusMesType
 
+	var notifyUserStatusMes  message.NotifyUserStatusMes
+	notifyUserStatusMes.UserId = userId
+	notifyUserStatusMes.Status = message.UserOnline
+
+	data, err := json.Marshal(notifyUserStatusMes)
+	if err != nil {
+		fmt.Println("json.Unmarshal error = ", err)
+		return
+	}
+	mes.Data = string(data)
+	tf := &utils.Transfer{
+		Conn: self.Conn,
+	}
+	err = tf.WritePkg(data)
+	return
+}
 func (self *UserProcess) ServerProcessLogin(mes *message.Message) (err error) {
 	// 注册部分核心代码
 	var loginMes message.LoginMes
@@ -45,6 +74,8 @@ func (self *UserProcess) ServerProcessLogin(mes *message.Message) (err error) {
 		loginResMes.Error = fmt.Sprintf("%s 登录成功\n", user.UserName)
 		self.UserId = loginMes.UserId
 		userMgr.AddOnlineUser(self)
+		// 通知其他在线用户我上线了
+		self.NotifyOthersOnlineUser(self.UserId)
 		for id, _ := range userMgr.onlineUsers{
 			loginResMes.UsersId = append(loginResMes.UsersId, id)
 		}

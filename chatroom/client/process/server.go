@@ -1,8 +1,10 @@
 package process
 
 import (
+	"encoding/json"
 	"fmt"
 	"go-learning/chatroom/client/utils"
+	"go-learning/chatroom/common/message"
 	"net"
 	"os"
 )
@@ -19,6 +21,7 @@ func ShowMenu() {
 	switch key {
 	case 1:
 		fmt.Println("显示在线用户列表")
+		outputOnlineUser()
 	case 2:
 		fmt.Println("发送消息")
 	case 3:
@@ -34,7 +37,7 @@ func ShowMenu() {
 func serverProcessMes(Conn net.Conn) {
 	// 创建一个transfer实例 不停读取服务器发送的信息
 	tf := &utils.Transfer{
-		Conn:Conn,
+		Conn: Conn,
 	}
 	for {
 		fmt.Println("客户端正在等待读取服务器发送的消息 ")
@@ -44,6 +47,18 @@ func serverProcessMes(Conn net.Conn) {
 			return
 		}
 		// 如果读取到信息...
+		switch mes.Type {
+		case message.NotifyUserStatusMesType: // 有人上线了
+			var notifyUserStatusMes message.NotifyUserStatusMes
+			err = json.Unmarshal([]byte(mes.Data), &notifyUserStatusMes)
+			if err != nil {
+				fmt.Println("json.Unmarshal err")
+				return
+			}
+			updateUserStatus(&notifyUserStatusMes)
+		default:
+			fmt.Println("服务器收到位置消息类型")
+		}
 		fmt.Println(mes)
 	}
 }

@@ -35,5 +35,5 @@ func (self *UserMgr) GetOnlineUserByID(userId int) (up *UserProcess, err error){
 		err = fmt.Errorf("用户%d 不存在", userId)
 		return
 	}
-	return up
+	return
 }

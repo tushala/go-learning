@@ -76,9 +76,23 @@ func (self *UserProcess) Login(userId int, userPwd string) (err error) {
 		// 启动一个协程保持和服务端的通讯,如果服务器有数据推送给客户端
 		go serverProcessMes(conn)
 		fmt.Println("当前在线用户列表如下：")
-		for _, v := range loginResMes.UsersId{
-			fmt.Println("用户id: \t", v)
+		if len(loginResMes.UsersId) > 0{
+			for _, v := range loginResMes.UsersId{
+				if v == userId{
+					continue
+				}
+				fmt.Println("用户id: \t", v)
+				user := &message.User{
+					UserId:     v,
+					UserStatus: message.UserOnline,
+				}
+				onlineUsers[v] = user
+
+			}
+		}else{
+			fmt.Println("无")
 		}
+
 		fmt.Print("\n\n")
 		//fmt.Println("登录成功")
 		for {
