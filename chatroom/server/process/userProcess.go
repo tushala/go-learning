@@ -11,24 +11,25 @@ import (
 
 type UserProcess struct {
 	// 字段
-	Conn net.Conn
+	Conn   net.Conn
 	UserId int
 }
+
 //通知其他用户我上线了
-func (self *UserProcess) NotifyOthersOnlineUser(userId int){
-	for id ,up := range userMgr.onlineUsers{
-		if id == userId{
+func (self *UserProcess) NotifyOthersOnlineUser(userId int) {
+	for id, up := range userMgr.onlineUsers {
+		if id == userId {
 			continue
 		}
 		// 通知
 		up.NotifyMeOnlineUser(userId)
 	}
 }
-func (self *UserProcess) NotifyMeOnlineUser(userId int){
+func (self *UserProcess) NotifyMeOnlineUser(userId int) {
 	var mes message.Message
 	mes.Type = message.NotifyUserStatusMesType
 
-	var notifyUserStatusMes  message.NotifyUserStatusMes
+	var notifyUserStatusMes message.NotifyUserStatusMes
 	notifyUserStatusMes.UserId = userId
 	notifyUserStatusMes.Status = message.UserOnline
 
@@ -38,10 +39,15 @@ func (self *UserProcess) NotifyMeOnlineUser(userId int){
 		return
 	}
 	mes.Data = string(data)
+	data, err = json.Marshal(mes)
 	tf := &utils.Transfer{
 		Conn: self.Conn,
 	}
 	err = tf.WritePkg(data)
+	if err != nil {
+		fmt.Println("发送通知结构体错误, err = ", err)
+		return
+	}
 	return
 }
 func (self *UserProcess) ServerProcessLogin(mes *message.Message) (err error) {
@@ -71,12 +77,13 @@ func (self *UserProcess) ServerProcessLogin(mes *message.Message) (err error) {
 		fmt.Printf("%s\n", err)
 	} else {
 		loginResMes.Code = 200
+		// 更新用户在线
 		loginResMes.Error = fmt.Sprintf("%s 登录成功\n", user.UserName)
 		self.UserId = loginMes.UserId
 		userMgr.AddOnlineUser(self)
 		// 通知其他在线用户我上线了
 		self.NotifyOthersOnlineUser(self.UserId)
-		for id, _ := range userMgr.onlineUsers{
+		for id, _ := range userMgr.onlineUsers {
 			loginResMes.UsersId = append(loginResMes.UsersId, id)
 		}
 		fmt.Printf("%s 登录成功\n", user.UserName)
@@ -133,7 +140,7 @@ func (self *UserProcess) ServerProcessRegister(mes *message.Message) (err error)
 			registerResMes.Code = 506
 			registerResMes.Error = "注册发生未知错误"
 		}
-	}else{
+	} else {
 		registerResMes.Code = 200
 	}
 	registerResMes.Error = fmt.Sprintf("%s", err)

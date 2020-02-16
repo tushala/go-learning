@@ -57,7 +57,7 @@ func serverProcessMes(Conn net.Conn) {
 			}
 			updateUserStatus(&notifyUserStatusMes)
 		default:
-			fmt.Println("服务器收到位置消息类型")
+			fmt.Println("服务器收到未知消息类型")
 		}
 		fmt.Println(mes)
 	}
