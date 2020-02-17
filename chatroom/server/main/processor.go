@@ -13,8 +13,9 @@ type Processor struct {
 	Conn net.Conn
 }
 
-func (self *Processor) serverProcessMes(mes *message.Message) (err error) {
+func (self *Processor)  serverProcessMes(mes *message.Message) (err error) {
 	// 根据客户端发送消息种类的不同，选择调用哪个函数
+	fmt.Println(111, mes)
 	switch mes.Type {
 	case message.LoginMesType:
 		// 创建 UserProcess 实例

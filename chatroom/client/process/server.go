@@ -9,7 +9,8 @@ import (
 	"os"
 )
 
-func ShowMenu() {
+func ShowMenu(userId int) {
+
 	fmt.Println("---------恭喜xxx登录成功---------")
 	fmt.Println("---------1.显示在线用户列表---------")
 	fmt.Println("---------2.发送消息---------")
@@ -17,13 +18,17 @@ func ShowMenu() {
 	fmt.Println("---------4.退出系统---------")
 
 	var key int
+	var content string
+	smsProcess := &SmsProcess{}
 	fmt.Scanf("%d\n", &key)
 	switch key {
 	case 1:
 		fmt.Println("显示在线用户列表")
 		outputOnlineUser()
 	case 2:
-		fmt.Println("发送消息")
+		fmt.Println("发送群息:")
+		fmt.Scanf("%s\n", &content)
+		smsProcess.SendGroupMes(content)
 	case 3:
 		fmt.Println("信息列表")
 	case 4:
@@ -59,6 +64,5 @@ func serverProcessMes(Conn net.Conn) {
 		default:
 			fmt.Println("服务器收到未知消息类型")
 		}
-		fmt.Println(mes)
 	}
 }

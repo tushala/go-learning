@@ -1,17 +1,19 @@
 package message
 
 const (
-	LoginMesType    = "LoginMes"
-	LoginResMesType = "LoginResMes"
-	RegisterType    = "RegisterMes"
-	RegisterMesType = "RegisterResMes"
+	LoginMesType            = "LoginMes"
+	LoginResMesType         = "LoginResMes"
+	RegisterType            = "RegisterMes"
+	RegisterMesType         = "RegisterResMes"
 	NotifyUserStatusMesType = "NotifyUserStatusMes"
+	SmsMesType              = "SmsMes"
 )
-const(
+const (
 	UserOnline = iota
 	UserOffline
 	UserBusy
 )
+
 type Message struct {
 	Type string `json:"type"` // 消息类型
 	Data string `json:"data"` // 消息的数据
@@ -41,4 +43,10 @@ type RegisterResMes struct {
 type NotifyUserStatusMes struct {
 	UserId int `json:"userId"`
 	Status int `json:"status"`
+}
+
+// 发送消息结构体
+type SmsMes struct {
+	Content string `json:"content"` // 内容
+	User
 }
