@@ -61,6 +61,8 @@ func serverProcessMes(Conn net.Conn) {
 				return
 			}
 			updateUserStatus(&notifyUserStatusMes)
+		case message.SmsMesType: // 有人群发了
+			outputGroupMes(&mes)
 		default:
 			fmt.Println("服务器收到未知消息类型")
 		}
